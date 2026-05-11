@@ -18,39 +18,31 @@ jobs:
       - name: Prepare Source and Bypass Safety
         run: |
           # 1. Force the Z height into the Bondtech variant template
-          # This ensures that even if the script 'syncs', it syncs to our 600mm value
           find . -type f -name "Bondtech-MK3S-16-EINSy10a-MM.h" -exec sed -i 's/#define Z_MAX_POS.*/#define Z_MAX_POS 600/g' {} +
           
-          # 2. Declaw the PF-build.sh script
-          # We disable the 'git checkout' commands so the script CANNOT restore/wipe your files
+          # 2. Inject missing definitions into Marlin.h to stop 'not declared' errors
+          # This handles Z_ENABLE_ON and the Live Adjust menu variable
+          sed -i '1i #define Z_ENABLE_ON 0' Firmware/Marlin.h
+          sed -i '1i #define Z_HEIGHT_HIDE_LIVE_ADJUST_MENU 2.0' Firmware/Marlin.h
+
+          # 3. Declaw the PF-build.sh script (Stop the restores)
           chmod +x PF-build.sh
           sed -i 's/git checkout/\/\/ git checkout/g' PF-build.sh
           sed -i 's/exit 24//g' PF-build.sh
           
-          # 3. Disable the "Z is too high" error in the background source code
-          # This converts #error lines into harmless comments
+          # 4. Disable "Z is too high" errors in background source
           grep -rl "Z_MAX_POS is too high" . | xargs sed -i 's/#error/\/\/ bypassed/g' || true
           
-          # 4. Commit these changes locally
-          # The build script checks if the git state is 'clean'. We make our changes the 'new clean'.
+          # 5. Commit changes locally to satisfy the build script's 'clean' check
           git config --global user.email "build@bot.com"
           git config --global user.name "Build Bot"
           git add .
-          git commit -m "Force 600mm Z and disable auto-restore" || true
+          git commit -m "Fix Z_ENABLE and Z_HEIGHT errors" || true
 
       - name: Build firmware
         run: |
-          # We run the build and force it to show us the errors even if it fails
-          ./PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1 -l EN_FARM || true
-          
-          # Check if the hex was actually created
-          if [ ! -f Firmware.ino.hex ]; then
-            echo "--------------------------------------------------------"
-            echo "BUILD FAILED - Searching for the specific compiler error:"
-            echo "--------------------------------------------------------"
-            # This searches the last few lines for the word 'error'
-            find . -name "*.log" -exec grep -i "error" {} + || echo "No log files found."
-          fi
+          ./PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1 -l EN_FARM
+
       - name: Upload artifact
         if: always()
         uses: actions/upload-artifact@v4

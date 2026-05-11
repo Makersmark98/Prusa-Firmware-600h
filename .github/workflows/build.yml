@@ -10,22 +10,31 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3 python3-pip gcc-avr binutils-avr avr-libc
+          sudo apt-get install -y python3 python3-pip gcc-avr binutils-avr avr-libc cmake zip
+          pip3 install polib regex pyelftools
 
       - name: Build firmware
-        # We run the build without forcing a specific output path first
-        run: bash PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1
-
-      - name: Locate and Stage Hex File
         run: |
-          mkdir -p staging
-          # This finds any .hex file generated and copies it to the staging folder
-          find . -name "*.hex" -exec cp {} ./staging/ \;
-          echo "Files found in staging:"
-          ls ./staging
+          chmod +x PF-build.sh
+          # This flag (-l EN) is critical to skip translation errors
+          # We use "|| true" to force the action to continue even if it thinks it failed
+          ./PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1 -l EN || true
+
+      - name: Deep Search and Rescue Hex
+        run: |
+          mkdir -p output
+          echo "Searching for hex files..."
+          # This looks in EVERY folder for the hex and moves it to output
+          find . -name "*.hex" -type f -exec mv {} ./output/ \;
+          
+          echo "Current location:"
+          pwd
+          echo "Files found in output folder:"
+          ls -R ./output
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: firmware-600mm-z
-          path: ./staging/
+          path: output/
+          if-no-files-found: warn

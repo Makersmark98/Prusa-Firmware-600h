@@ -12,7 +12,7 @@ jobs:
       - name: Build firmware
         run: bash PF-build.sh Bondtech-MK3S-16-EINSy10a-MM 600 0
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: firmware
           path: "**/*.hex"

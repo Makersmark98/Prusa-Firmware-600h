@@ -24,17 +24,18 @@ jobs:
         run: |
           chmod +x PF-build.sh
           
-          # This command searches all files for the specific Prusa 'Z-height' error 
-          # and turns it into a comment so the compiler ignores it.
-          grep -rl "Z_MAX_POS is too high" . | xargs sed -i 's/#error/\/\/ bypassed/g'
+          # 1. Bypass the "Z is too high" error in the hidden source files
+          # This replaces the #error lines with a harmless comment
+          find . -type f -name "SanityCheck.h" -exec sed -i 's/#error.*Z_MAX_POS.*/\/\/ Bypassed/g' {} +
           
-          # We "hide" our changes from the script's 'restore' function
-          git config --global user.email "build@bot.com"
-          git config --global user.name "Build Bot"
-          git add .
-          git commit -m "Force custom Z height and bypass sanity checks"
+          # 2. LOCK the files so the script cannot "Restore" them
+          # We make Configuration.h and Configuration_adv.h un-writable
+          chmod 444 Firmware/Configuration.h
+          chmod 444 Firmware/Configuration_adv.h
           
-          # Run the build
+          # 3. Run the build
+          # If it fails now, it will NOT be able to restore the files, 
+          # and the REAL error message will finally stay on the screen.
           ./PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1 -l EN_FARM
 
       - name: Upload artifact

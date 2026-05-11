@@ -59,6 +59,9 @@ extern const char _sPrinterMmuName[] PROGMEM;
 
 #include "Configuration_var.h"
 #define Z_MAX_POS 600
+#define Z_ENABLE_ON 0
+#define Z_HEIGHT_HIDE_LIVE_ADJUST_MENU 2.0
+#define DISABLE_Z_MAX_PROTECTION
 #define Z_MIN_POS 0
 
 #define FW_PRUSA3D_MAGIC "PRUSA3DFW"

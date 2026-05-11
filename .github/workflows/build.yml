@@ -16,8 +16,8 @@ jobs:
       - name: Build firmware
         run: |
           chmod +x PF-build.sh
-          # We run this and redirect errors to a file we can read
-          bash PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1 -l EN > build_log.txt 2>&1 || true
+          # Changed -l EN to -l EN_FARM to satisfy the script's requirements
+          ./PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1 -l EN_FARM
 
       - name: Show the Error
         run: |

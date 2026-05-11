@@ -12,7 +12,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3 python3-pip gcc-avr binutils-avr avr-libc cmake zip
+          sudo apt-get install -y python3 python3-pip zip cmake
           pip3 install polib regex pyelftools
 
       - name: Prepare Source and Bypass Safety

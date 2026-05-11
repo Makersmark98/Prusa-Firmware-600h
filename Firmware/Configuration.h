@@ -1,17 +1,49 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
-// === CUSTOM HEIGHT & MOTOR FIXES ===
+// === CUSTOM 600MM HEIGHT & CORE FIXES ===
 #define Z_MAX_POS 600
-#define Z_ENABLE_ON 0
+#define Z_MIN_POS 0
+#define X_MAX_POS 250
+#define Y_MAX_POS 212.5
+
+// Motor Driver & Homing Logic
 #define X_ENABLE_ON 0
 #define Y_ENABLE_ON 0
+#define Z_ENABLE_ON 0
 #define E_ENABLE_ON 0
 #define X_HOME_DIR -1
 #define Y_HOME_DIR -1
 #define Z_HOME_DIR -1
+
+// Endstop Inverting (Standard MK3S values)
+#define X_MIN_ENDSTOP_INVERTING false
+#define Y_MIN_ENDSTOP_INVERTING false
+#define Z_MIN_ENDSTOP_INVERTING false
+#define X_MAX_ENDSTOP_INVERTING false
+#define Y_MAX_ENDSTOP_INVERTING false
+#define Z_MAX_ENDSTOP_INVERTING false
+
+// Software Endstops & Thresholds
+#define HOME_Z_SEARCH_THRESHOLD 2.0
+#define MESH_HOME_Z_SEARCH 5.0
+bool min_software_endstops = true;
+bool max_software_endstops = true;
+
+// Homing Positions
+#define X_HOME_POS 0
+#define Y_HOME_POS -2.2
+#define Z_HOME_POS 0
+
+// Safety & UI Bypasses
 #define Z_HEIGHT_HIDE_LIVE_ADJUST_MENU 2.0
 #define DISABLE_Z_MAX_PROTECTION
+#define NUM_AXIS 4
+
+// Bed Leveling Dependencies
+#define MESH_BED_LEVELING
+#define BED_CHECK_TOLERANCE 0.1
+#define BED_CHECK_ITERATIONS 3
 // ===================================
 
 #include "boards.h"

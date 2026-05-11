@@ -12,7 +12,7 @@ jobs:
       - name: Build firmware
         run: bash PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1 -o /home/runner/work/output
       - name: Find hex files
-        run: find / -name "*.hex" 2>/dev/null | grep -i "prusa\|mk3\|firmware" || echo "Nothing found"
+        run: find /home/runner/work -name "*.hex" 2>/dev/null
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:

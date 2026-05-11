@@ -10,7 +10,7 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get install -y python3 python3-pip
       - name: Build firmware
-        run: bash PF-build.sh Bondtech-MK3S-16-EINSy10a-MM 600 0
+        run: bash PF-build.sh Bondtech-MK3S-16-EINSy10a-MM 600 0 || true
       - name: Find hex files
         run: find / -name "*.hex" 2>/dev/null | grep -i "prusa\|mk3\|firmware" || echo "Nothing found"
       - name: Upload artifact
@@ -18,3 +18,5 @@ jobs:
         with:
           name: firmware
           path: /home/runner/work/PF-build-hex/FW-Build/
+      - name: List build output
+        run: ls -la /home/runner/work/

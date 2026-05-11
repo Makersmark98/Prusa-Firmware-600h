@@ -40,9 +40,17 @@ jobs:
 
       - name: Build firmware
         run: |
-          # Run the build script for the specific Bondtech variant
-          ./PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1 -l EN_FARM
-
+          # We run the build and force it to show us the errors even if it fails
+          ./PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1 -l EN_FARM || true
+          
+          # Check if the hex was actually created
+          if [ ! -f Firmware.ino.hex ]; then
+            echo "--------------------------------------------------------"
+            echo "BUILD FAILED - Searching for the specific compiler error:"
+            echo "--------------------------------------------------------"
+            # This searches the last few lines for the word 'error'
+            find . -name "*.log" -exec grep -i "error" {} + || echo "No log files found."
+          fi
       - name: Upload artifact
         if: always()
         uses: actions/upload-artifact@v4

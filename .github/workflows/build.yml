@@ -17,6 +17,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: firmware
-          path: PF-build-hex/
+          path: /home/runner/work/Prusa-Firmware-600h/Prusa-Firmware-600h/PF-build-hex/
       - name: List build output
         run: find /home/runner/work/_temp -type f 2>/dev/null || echo "Nothing in temp"

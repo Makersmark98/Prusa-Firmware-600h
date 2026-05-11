@@ -110,12 +110,13 @@
     #endif //BED_CENTER_AT_0_0
   #endif //Y_HOME_DIR == -1
 
-  // Z axis
-  #if Z_HOME_DIR == -1 //BED_CENTER_AT_0_0 not used
-    #define Z_HOME_POS Z_MIN_POS
+ // Z axis
+  #if Z_HOME_DIR == -1
+    #define Z_HOME_POS 0  // Force home to be 0
   #else
+    #define Z_MAX_POS 600
     #define Z_HOME_POS Z_MAX_POS
-  #endif //Z_HOME_DIR == -1
+  #endif
 #endif //End auto min/max positions
 //END AUTOSET LOCATIONS OF LIMIT SWITCHES -ZP
 

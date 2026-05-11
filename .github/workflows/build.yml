@@ -19,4 +19,4 @@ jobs:
           name: firmware
           path: /home/runner/work/PF-build-hex/FW-Build/
       - name: List build output
-        run: ls -la /home/runner/work/
+        run: find /home/runner/work/_temp -type f 2>/dev/null || echo "Nothing in temp"

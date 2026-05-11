@@ -10,21 +10,23 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3 python3-pip gcc-avr binutils-avr avr-libc cmake zip
+          sudo apt-get install -y python3 python3-pip gcc-avr binutils-avr avr-libc cmake
           pip3 install polib regex pyelftools
 
-      - name: Build firmware
+      - name: Prepare variant
         run: |
-          chmod +x PF-build.sh
-          # We use EN_FARM because it's the most stable single-language target
-          ./PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1 -l EN_FARM
+          # Manually move the variant file to the config spot 
+          # This is what the script usually does, but we are doing it manually
+          cp Firmware/variants/Bondtech-MK3S-16-EINSy10a-MM.h Firmware/config.h
+
+      - name: Build firmware (Direct Mode)
+        working-directory: ./Firmware
+        run: |
+          # We call the compiler directly so it can't "restore" your files
+          make -j$(nproc)
 
       - name: Upload artifact
-        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: firmware-600mm-z
-          # This path looks for any .hex file created in the main or hex folder
-          path: |
-            *.hex
-            hex/*.hex
+          path: Firmware/*.hex

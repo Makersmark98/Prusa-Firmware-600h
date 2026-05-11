@@ -47,6 +47,9 @@
 #include "Marlin.h"
 #include "config.h"
 
+bool min_software_endstops = true;
+bool max_software_endstops = true;
+
 #include "macros.h"
 
 #ifdef ENABLE_AUTO_BED_LEVELING

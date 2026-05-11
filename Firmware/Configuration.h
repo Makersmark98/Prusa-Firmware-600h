@@ -225,8 +225,8 @@ your extruder heater takes 2 minutes to hit the target on heating.
 #define Z_MIN_POS 0
 #define X_MAX_POS 250
 #define X_MIN_POS 0
-#define Y_MAX_POS 210
-#define Y_MIN_POS -4
+#define Y_MAX_POS 212.5
+#define Y_MIN_POS -2
 
 #define X_MAX_LENGTH (X_MAX_POS - X_MIN_POS)
 #define Y_MAX_LENGTH (Y_MAX_POS - Y_MIN_POS)

@@ -12,16 +12,17 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3 python3-pip zip cmake
+          sudo apt-get install -y python3 python3-pip gcc-avr binutils-avr avr-libc cmake zip
           pip3 install polib regex pyelftools
 
       - name: Prepare Source and Bypass Safety
         run: |
-          # 1. Force the Z height into the Bondtech variant template
+          # 1. Force the Z height into the Bondtech variant template file
+          # This acts as the backup if the script tries to sync
           find . -type f -name "Bondtech-MK3S-16-EINSy10a-MM.h" -exec sed -i 's/#define Z_MAX_POS.*/#define Z_MAX_POS 600/g' {} +
           
-          # 2. Inject ALL motor, homing, and endstop definitions into Marlin.h
-          # This fixes the 'not declared' errors for motors and search thresholds
+          # 2. Inject core definitions into Marlin.h for absolute priority
+          # This ensures the compiler sees these before anything else
           sed -i '1i #define X_ENABLE_ON 0' Firmware/Marlin.h
           sed -i '1i #define Y_ENABLE_ON 0' Firmware/Marlin.h
           sed -i '1i #define Z_ENABLE_ON 0' Firmware/Marlin.h
@@ -35,24 +36,26 @@ jobs:
           sed -i '1i #define HOME_Z_SEARCH_THRESHOLD 2.0' Firmware/Marlin.h
           sed -i '1i #define MESH_HOME_Z_SEARCH 5.0' Firmware/Marlin.h
           sed -i '1i #define Z_HEIGHT_HIDE_LIVE_ADJUST_MENU 2.0' Firmware/Marlin.h
+          sed -i '1i #define min_software_endstops true' Firmware/Marlin.h
+          sed -i '1i #define max_software_endstops true' Firmware/Marlin.h
 
-          # 3. Declaw the PF-build.sh script (Stop the 'Restoring Configuration.h' loop)
+          # 3. Disable the auto-restore features in the build script
           chmod +x PF-build.sh
           sed -i 's/git checkout/\/\/ git checkout/g' PF-build.sh
           sed -i 's/exit 24//g' PF-build.sh
           
-          # 4. Disable "Z is too high" sanity checks in background source code
+          # 4. Silence the "Z is too high" #error messages in the source code
           grep -rl "Z_MAX_POS is too high" . | xargs sed -i 's/#error/\/\/ bypassed/g' || true
           
-          # 5. Commit changes locally to satisfy the build script's integrity checks
+          # 5. Commit these changes so the build script thinks the repo is "clean"
           git config --global user.email "build@bot.com"
           git config --global user.name "Build Bot"
           git add .
-          git commit -m "Force motor pins, endstops, and 600mm Z" || true
+          git commit -m "Final 600mm force build" || true
 
       - name: Build firmware
         run: |
-          # Build the Bondtech variant
+          # Execute the build for the Bondtech MK3S variant
           ./PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1 -l EN_FARM
 
       - name: Upload artifact

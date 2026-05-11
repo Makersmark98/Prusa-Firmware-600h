@@ -2,17 +2,10 @@
 #define CONFIGURATION_H
 
 // === CUSTOM 600MM HEIGHT & CORE FIXES ===
-// We define these first so they are available globally
 #define Z_MAX_POS 600
 #define Z_MIN_POS 0
 #define X_MAX_POS 250
-#define X_MIN_POS 0
 #define Y_MAX_POS 212.5
-#define Y_MIN_POS -2
-
-#define X_MAX_LENGTH (X_MAX_POS - X_MIN_POS)
-#define Y_MAX_LENGTH (Y_MAX_POS - Y_MIN_POS)
-#define Z_MAX_LENGTH (Z_MAX_POS - Z_MIN_POS)
 
 // Motor Driver & Homing Logic
 #define X_ENABLE_ON 0
@@ -23,29 +16,25 @@
 #define Y_HOME_DIR -1
 #define Z_HOME_DIR -1
 
-// Endstop Inverting
-#define X_MIN_ENDSTOP_INVERTING false
-#define Y_MIN_ENDSTOP_INVERTING false
-#define Z_MIN_ENDSTOP_INVERTING false
-#define X_MAX_ENDSTOP_INVERTING false
-#define Y_MAX_ENDSTOP_INVERTING false
-#define Z_MAX_ENDSTOP_INVERTING false
+// Endstop Inverting (0 = false)
+#define X_MIN_ENDSTOP_INVERTING 0
+#define Y_MIN_ENDSTOP_INVERTING 0
+#define Z_MIN_ENDSTOP_INVERTING 0
+#define X_MAX_ENDSTOP_INVERTING 0
+#define Y_MAX_ENDSTOP_INVERTING 0
+#define Z_MAX_ENDSTOP_INVERTING 0
 
-// Software Endstops & Thresholds (Macros used to avoid 'bool' error)
+// Software Endstops & Thresholds (1 = true)
 #define HOME_Z_SEARCH_THRESHOLD 2.0
 #define MESH_HOME_Z_SEARCH 5.0
-#define min_software_endstops true
-#define max_software_endstops true
-
-// Homing Positions
-#define X_HOME_POS 0
-#define Y_HOME_POS -2.2
-#define Z_HOME_POS 0
+#define min_software_endstops 1
+#define max_software_endstops 1
 
 // Safety & UI Bypasses
 #define Z_HEIGHT_HIDE_LIVE_ADJUST_MENU 2.0
 #define DISABLE_Z_MAX_PROTECTION
 #define NUM_AXIS 4
+// ===================================
 
 // Bed Leveling Dependencies
 #define MESH_BED_LEVELING

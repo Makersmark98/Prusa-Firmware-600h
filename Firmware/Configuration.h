@@ -1,6 +1,19 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
+// === CUSTOM HEIGHT & MOTOR FIXES ===
+#define Z_MAX_POS 600
+#define Z_ENABLE_ON 0
+#define X_ENABLE_ON 0
+#define Y_ENABLE_ON 0
+#define E_ENABLE_ON 0
+#define X_HOME_DIR -1
+#define Y_HOME_DIR -1
+#define Z_HOME_DIR -1
+#define Z_HEIGHT_HIDE_LIVE_ADJUST_MENU 2.0
+#define DISABLE_Z_MAX_PROTECTION
+// ===================================
+
 #include "boards.h"
 
 #define STR_HELPER(x) #x

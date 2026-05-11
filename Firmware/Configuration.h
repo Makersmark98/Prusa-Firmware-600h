@@ -232,15 +232,14 @@ your extruder heater takes 2 minutes to hit the target on heating.
 #define Y_MAX_LENGTH (Y_MAX_POS - Y_MIN_POS)
 #define Z_MAX_LENGTH (Z_MAX_POS - Z_MIN_POS)
 
-// Raise Z 5mm before homing for probe clearance
+// This provides the 5mm clearance at the bottom before homing
 #define Z_RAISE_BEFORE_HOMING 5 
 
-// Safe homing points (middle of the bed)
+// Safe homing points (center of the heatbed)
 #define Z_SAFE_HOMING_X_POINT 125
 #define Z_SAFE_HOMING_Y_POINT 105
 
-// This prevents the compiler from comparing Z_MAX + Z_RAISE against 
-// the old 210mm hard-coded limits in the background
+// Stops the firmware from checking if 600mm is "too tall"
 #define DISABLE_Z_MAX_PROTECTION
 
 //============================= Bed Auto Leveling ===========================

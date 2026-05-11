@@ -17,6 +17,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: firmware
-          path: /home/runner/work/output
+          path: PF-build-hex/
       - name: List build output
         run: find /home/runner/work/_temp -type f 2>/dev/null || echo "Nothing in temp"

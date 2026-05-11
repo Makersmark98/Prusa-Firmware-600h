@@ -58,6 +58,8 @@ extern const char _sPrinterMmuName[] PROGMEM;
 #endif
 
 #include "Configuration_var.h"
+#define Z_MAX_POS 600
+#define Z_MIN_POS 0
 
 #define FW_PRUSA3D_MAGIC "PRUSA3DFW"
 #define FW_PRUSA3D_MAGIC_LEN 10
@@ -285,9 +287,13 @@ your extruder heater takes 2 minutes to hit the target on heating.
 #endif //DEBUG_DISABLE_SWLIMITS
 
 
-#define X_MAX_LENGTH (X_MAX_POS - X_MIN_POS)
-#define Y_MAX_LENGTH (Y_MAX_POS - Y_MIN_POS)
-#define Z_MAX_LENGTH (Z_MAX_POS - Z_MIN_POS)
+#define X_MAX_POS 250
+#define X_MIN_POS 0
+#define Y_MAX_POS 210
+#define Y_MIN_POS -4
+#define X_MAX_LENGTH 250
+#define Y_MAX_LENGTH 214
+#define Z_MAX_LENGTH 600
 
 #define Z_HEIGHT_HIDE_LIVE_ADJUST_MENU 2.0f
 
@@ -517,5 +523,15 @@ your extruder heater takes 2 minutes to hit the target on heating.
 
 #include "Configuration_adv.h"
 #include "thermistortables.h"
+
+#ifdef Z_MAX_POS
+#undef Z_MAX_POS
+#define Z_MAX_POS 600
+#endif
+
+#ifdef Z_MAX_LENGTH
+#undef Z_MAX_LENGTH
+#define Z_MAX_LENGTH 600
+#endif
 
 #endif //__CONFIGURATION_H

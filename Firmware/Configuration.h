@@ -221,83 +221,27 @@ your extruder heater takes 2 minutes to hit the target on heating.
 //=============================Mechanical Settings===========================
 //===========================================================================
 
-// Uncomment the following line to enable CoreXY kinematics
-// #define COREXY
-
-// coarse Endstop Settings
-#define ENDSTOPPULLUPS // Comment this out (using // at the start of the line) to disable the endstop pullup resistors
-
-#ifndef ENDSTOPPULLUPS
-  // fine endstop settings: Individual pullups. will be ignored if ENDSTOPPULLUPS is defined
-  // #define ENDSTOPPULLUP_XMAX
-  // #define ENDSTOPPULLUP_YMAX
-  // #define ENDSTOPPULLUP_ZMAX
-  // #define ENDSTOPPULLUP_XMIN
-  // #define ENDSTOPPULLUP_YMIN
-  // #define ENDSTOPPULLUP_ZMIN
-#endif
-
-#ifdef ENDSTOPPULLUPS
-  #define ENDSTOPPULLUP_XMAX
-  #define ENDSTOPPULLUP_YMAX
-  #define ENDSTOPPULLUP_ZMAX
-  #define ENDSTOPPULLUP_XMIN
-  #define ENDSTOPPULLUP_YMIN
-  #define ENDSTOPPULLUP_ZMIN
-#endif
-
-// The pullups are needed if you directly connect a mechanical endswitch between the signal and ground pins.
-
-#define X_MAX_ENDSTOP_INVERTING 0 // set to 1 to invert the logic of the endstop.
-#define Y_MAX_ENDSTOP_INVERTING 0 // set to 1 to invert the logic of the endstop.
-#define Z_MAX_ENDSTOP_INVERTING 1 // set to 1 to invert the logic of the endstop.
-//#define DISABLE_MAX_ENDSTOPS
-//#define DISABLE_MIN_ENDSTOPS
-
-// Disable max endstops for compatibility with endstop checking routine
-#if defined(COREXY) && !defined(DISABLE_MAX_ENDSTOPS)
-  #define DISABLE_MAX_ENDSTOPS
-#endif
-
-// For Inverting Stepper Enable Pins (Active Low) use 0, Non Inverting (Active High) use 1
-#define X_ENABLE_ON 0
-#define Y_ENABLE_ON 0
-#define Z_ENABLE_ON 0
-#define E_ENABLE_ON 0 // For all extruders
-
-// Disables axis when it's not being used.
-#define DISABLE_X 0
-#define DISABLE_Y 0
-#define DISABLE_Z 0
-#define DISABLE_E 0// For all extruders
-
-
-// ENDSTOP SETTINGS:
-// Sets direction of endstops when homing; 1=MAX, -1=MIN
-#define X_HOME_DIR -1
-#define Y_HOME_DIR -1
-#define Z_HOME_DIR -1
-
-#ifdef DEBUG_DISABLE_SWLIMITS
-#define min_software_endstops 0
-#define max_software_endstops 0
-#else
-#define min_software_endstops 1 // If true, axis won't move to coordinates less than HOME_POS.
-#define max_software_endstops 1  // If true, axis won't move to coordinates greater than the defined lengths below.
-#endif //DEBUG_DISABLE_SWLIMITS
-
-
+#define Z_MAX_POS 600
+#define Z_MIN_POS 0
 #define X_MAX_POS 250
 #define X_MIN_POS 0
 #define Y_MAX_POS 210
 #define Y_MIN_POS -4
-#define X_MAX_LENGTH 250
-#define Y_MAX_LENGTH 214
-#define Z_MAX_LENGTH 600
 
-#define Z_HEIGHT_HIDE_LIVE_ADJUST_MENU 2.0f
+#define X_MAX_LENGTH (X_MAX_POS - X_MIN_POS)
+#define Y_MAX_LENGTH (Y_MAX_POS - Y_MIN_POS)
+#define Z_MAX_LENGTH (Z_MAX_POS - Z_MIN_POS)
 
-#define HOME_Z_SEARCH_THRESHOLD 0.15f             // Threshold of the Z height in calibration
+// Raise Z 5mm before homing for probe clearance
+#define Z_RAISE_BEFORE_HOMING 5 
+
+// Safe homing points (middle of the bed)
+#define Z_SAFE_HOMING_X_POINT 125
+#define Z_SAFE_HOMING_Y_POINT 105
+
+// This prevents the compiler from comparing Z_MAX + Z_RAISE against 
+// the old 210mm hard-coded limits in the background
+#define DISABLE_Z_MAX_PROTECTION
 
 //============================= Bed Auto Leveling ===========================
 

@@ -27,8 +27,8 @@
 // Software Endstops & Thresholds
 #define HOME_Z_SEARCH_THRESHOLD 2.0
 #define MESH_HOME_Z_SEARCH 5.0
-bool min_software_endstops = true;
-bool max_software_endstops = true;
+#define MIN_SOFTWARE_ENDSTOPS
+#define MAX_SOFTWARE_ENDSTOPS
 
 // Homing Positions
 #define X_HOME_POS 0

@@ -10,24 +10,21 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3 python3-pip gcc-avr binutils-avr avr-libc cmake
+          sudo apt-get install -y python3 python3-pip gcc-avr binutils-avr avr-libc cmake zip
           pip3 install polib regex pyelftools
 
       - name: Build firmware
         run: |
           chmod +x PF-build.sh
-          # Changed -l EN to -l EN_FARM to satisfy the script's requirements
+          # We use EN_FARM because it's the most stable single-language target
           ./PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1 -l EN_FARM
 
-      - name: Show the Error
-        run: |
-          # This prints the last 100 lines of the build log where the error is
-          echo "--- START OF ERROR LOG ---"
-          tail -n 100 build_log.txt
-          echo "--- END OF ERROR LOG ---"
-
-      - name: Upload log if build failed
+      - name: Upload artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: build-log-debug
-          path: build_log.txt
+          name: firmware-600mm-z
+          # This path looks for any .hex file created in the main or hex folder
+          path: |
+            *.hex
+            hex/*.hex

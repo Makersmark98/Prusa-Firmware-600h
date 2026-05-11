@@ -10,31 +10,24 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3 python3-pip gcc-avr binutils-avr avr-libc cmake zip
+          sudo apt-get install -y python3 python3-pip gcc-avr binutils-avr avr-libc cmake
           pip3 install polib regex pyelftools
 
       - name: Build firmware
         run: |
           chmod +x PF-build.sh
-          # This flag (-l EN) is critical to skip translation errors
-          # We use "|| true" to force the action to continue even if it thinks it failed
-          ./PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1 -l EN || true
+          # We run this and redirect errors to a file we can read
+          bash PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1 -l EN > build_log.txt 2>&1 || true
 
-      - name: Deep Search and Rescue Hex
+      - name: Show the Error
         run: |
-          mkdir -p output
-          echo "Searching for hex files..."
-          # This looks in EVERY folder for the hex and moves it to output
-          find . -name "*.hex" -type f -exec mv {} ./output/ \;
-          
-          echo "Current location:"
-          pwd
-          echo "Files found in output folder:"
-          ls -R ./output
+          # This prints the last 100 lines of the build log where the error is
+          echo "--- START OF ERROR LOG ---"
+          tail -n 100 build_log.txt
+          echo "--- END OF ERROR LOG ---"
 
-      - name: Upload artifact
+      - name: Upload log if build failed
         uses: actions/upload-artifact@v4
         with:
-          name: firmware-600mm-z
-          path: output/
-          if-no-files-found: warn
+          name: build-log-debug
+          path: build_log.txt

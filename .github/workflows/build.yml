@@ -6,6 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Necessary to let the script see the git history
 
       - name: Install dependencies
         run: |
@@ -13,20 +15,29 @@ jobs:
           sudo apt-get install -y python3 python3-pip gcc-avr binutils-avr avr-libc cmake
           pip3 install polib regex pyelftools
 
-      - name: Prepare variant
+      - name: Force Git Identity
         run: |
-          # Manually move the variant file to the config spot 
-          # This is what the script usually does, but we are doing it manually
-          cp Firmware/variants/Bondtech-MK3S-16-EINSy10a-MM.h Firmware/config.h
+          git config --global user.email "build@bot.com"
+          git config --global user.name "Build Bot"
 
-      - name: Build firmware (Direct Mode)
-        working-directory: ./Firmware
+      - name: Build firmware
         run: |
-          # We call the compiler directly so it can't "restore" your files
-          make -j$(nproc)
+          chmod +x PF-build.sh
+          
+          # We "hide" our changes from the script's 'restore' function 
+          # by making them the current HEAD of the git branch inside the runner
+          git add .
+          git commit -m "Force custom Z height"
+          
+          # Now run the script with the correct language flag
+          ./PF-build.sh -v Bondtech-MK3S-16-EINSy10a-MM.h -n 1 -l EN_FARM
 
       - name: Upload artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: firmware-600mm-z
-          path: Firmware/*.hex
+          path: |
+            *.hex
+            hex/*.hex
+            output/*.hex

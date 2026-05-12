@@ -1,29 +1,13 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
-// --- FORCED 600mm BUILD SETTINGS ---
+// === MANDATORY 600MM OVERRIDE ===
 #define Z_MAX_POS 600
 #define Z_MIN_POS 0
 #define X_MAX_POS 250
 #define Y_MAX_POS 212.5
-#define X_ENABLE_ON 0
-#define Y_ENABLE_ON 0
-#define Z_ENABLE_ON 0
-#define E_ENABLE_ON 0
-#define X_HOME_DIR -1
-#define Y_HOME_DIR -1
-#define Z_HOME_DIR -1
-#define X_MAX_ENDSTOP_INVERTING 0
-#define Y_MAX_ENDSTOP_INVERTING 0
-#define Z_MAX_ENDSTOP_INVERTING 0
-#define HOME_Z_SEARCH_THRESHOLD 2.0
-#define MESH_HOME_Z_SEARCH 5.0
-#define min_software_endstops 1
-#define max_software_endstops 1
-#define Z_HEIGHT_HIDE_LIVE_ADJUST_MENU 2.0
 #define DISABLE_Z_MAX_PROTECTION
-#define NUM_AXIS 4
-// --- END FORCED SETTINGS ---
+#define Z_HEIGHT_HIDE_LIVE_ADJUST_MENU 2.0
 
 #include "boards.h"
 
